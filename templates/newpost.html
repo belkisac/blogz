@@ -6,33 +6,34 @@
 
 
 <form method='POST' action="/newpost">
+    <p>
     <label>
-        Blog Title:
+        Blog Title:<br/>
         <input type="text" name="title" value="{{title}}"/>
     </label>
-        {% with messages = get_flashed_messages(category_filter=["title_error"]) %}
+    {% with messages = get_flashed_messages(category_filter=["title_error"]) %}
         {% if messages %}
-        <ul>
-        {% for message in messages %}
-           <li> {{message}} </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+            {% for message in messages %}
+                <p class="error">{{message}}</p>
+            {% endfor %}
+        {% endif %}
     {% endwith %}
+    </p>
+    <p>
     <label>
-        New Blog:
-        <input type="textarea" name="body"  value="{{body}}"/>
+        New Blog:<br/>
+        <textarea name="body"/>{{body}}</textarea>
     </label>
-    <input type="submit" value="Add Entry" />
-        {% with messages = get_flashed_messages(category_filter=["body_error"]) %}
+    {% with messages = get_flashed_messages(category_filter=["body_error"]) %}
         {% if messages %}
-        <ul>
-        {% for message in messages %}
-           <li> {{message}} </li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+            {% for message in messages %}
+                <p class="error">{{message}}</p>
+            {% endfor %}
+        {% endif %}
     {% endwith %}
+    </p>
+    <input type="submit" value="Add Entry" />
+
 </form>
 
 {% endblock %}

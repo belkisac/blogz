@@ -39,32 +39,25 @@ def newpost():
     errors = False
 
     if request.method == 'POST':
-        post_title = request.form['title']
-        post_body = request.form['body']
+        title = request.form['title']
+        body = request.form['body']
 
-        if post_title == '':
+        if title == '':
             flash("Please enter a title", "title_error")
             title = ''
-            body = post_body
             errors = True
         else:
-            title = post_title
-        if post_body == '':
+            title = title
+        if body == '':
             flash("Please enter the body of your post", "body_error")
             body = ''
-            title = post_title
             errors = True
         else:
-            body = post_body
+            body = body
         if errors:
             return render_template('newpost.html',title=title,body=body)
-
-        #if post_title == '' and post_body == '':
-        #    flash("Please enter a title")
-        #    flash("Please enter the body of your post")
-        #    return redirect("/newpost")
         else:
-            new_post = Blog(post_title,post_body)
+            new_post = Blog(title,body)
             db.session.add(new_post)
             db.session.commit()
             post = Blog.query.filter_by(id=new_post.id).first()
