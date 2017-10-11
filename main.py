@@ -21,13 +21,15 @@ class Blog(db.Model):
 @app.route('/blog', methods=['POST', 'GET'])
 def blog_display():
 
-    post_id = int(request.form['post-id'])
-    p_id = Blog.query.filter_by(post_id = post.id).first()
-    post_id_get = request.args[p_id]
-    if 
-
-    posts = Blog.query.all()
-    return render_template('blog.html',posts=posts)
+    if request.args != {}:
+        post_id = request.args.get('id', '')
+        post = Blog.query.get(post_id)
+        title = post.title
+        body = post.body
+        return render_template('solo.html',title=title,body=body)
+    else:
+        posts = Blog.query.all()
+        return render_template('blog.html',posts=posts)
 
 
 @app.route('/newpost', methods=['POST', 'GET'])
@@ -65,6 +67,7 @@ def newpost():
             new_post = Blog(post_title,post_body)
             db.session.add(new_post)
             db.session.commit()
+            
             return redirect('/blog')
     
     return render_template('newpost.html')
