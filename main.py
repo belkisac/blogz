@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, flash
+from flask import Flask, request, redirect, render_template, session, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -67,8 +67,9 @@ def newpost():
             new_post = Blog(post_title,post_body)
             db.session.add(new_post)
             db.session.commit()
-            
-            return redirect('/blog')
+            post = Blog.query.filter_by(id=new_post.id).first()
+            trying = post.id
+            return redirect(url_for('.blog_display', id=trying))
     
     return render_template('newpost.html')
 
