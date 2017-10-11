@@ -68,8 +68,8 @@ def newpost():
             db.session.add(new_post)
             db.session.commit()
             post = Blog.query.filter_by(id=new_post.id).first()
-            trying = post.id
-            return redirect(url_for('.blog_display', id=trying))
+            post_id = post.id
+            return redirect(url_for('.blog_display', id=post_id))
     
     return render_template('newpost.html')
 

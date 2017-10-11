@@ -4,6 +4,10 @@
 
 <h1>Build A Blog</h1>
 
+    {% if posts|length == 0 %}
+    <p>No posts yet! Why don't you <a href="/newpost">add one</a>?</p>
+    {% else %}
+
     {% for post in posts %}
     <div><h1><a href="?id={{post.id}}">{{post.title}}</a></h1>
         <p>{{post.body}}</p>
@@ -11,5 +15,6 @@
     <hr />
     </div>
     {% endfor %}
+    {% endif %}
 
 {% endblock %}
