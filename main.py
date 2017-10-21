@@ -44,6 +44,53 @@ def blog_display():
         posts = Blog.query.all()
         return render_template('blog.html',posts=posts)
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            session['username'] = username
+            return redirect('/newpost')
+        else:
+            if not user:
+                flash("Username does not exist")
+            if user.password != password:
+                flash("Incorrect password")
+    
+    return render_template('login.html')
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        #verify input
+        if len(username) < 3:
+            flash("Username must be longer than 3 characters")
+        if len(password) < 3:
+            flash("Password must be longer than 3 characters")
+        if password != verify:
+            flash("Passwords do not match")
+        else:
+        #ensure username does not already exist
+            existing_user = User.query.filter_by(username=username)
+
+            if not existing_user:
+                new_user = User(username,password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = username
+                return redirect('/newpost')
+            else:
+                flash("Username already exists")
+
+    return render_template('signup.html')
+
+
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
