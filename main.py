@@ -40,23 +40,23 @@ def require_login():
 @app.route('/blog', methods=['POST', 'GET'])
 def blog_display():
 
-    user_id = request.args.get('user', '')
-    post_id = request.args.get('id', '')
+    user_id = request.args.get('user','')
+    post_id = request.args.get('id','')
 
     if request.args != {}:
-        if request.args['user']:
-            #user_id = request.args.get('user', '')
-            user = User.query.filter_by(id=user_id).first()
-            posts = user.posts
-            return render_template('singleUser.html', posts=posts)
-        if request.args['id']:
+        if 'id' in request.args:
             #post_id = request.args.get('id', '')
             post = Blog.query.filter_by(id=post_id).first()
             title = post.title
             body = post.body
             owner = post.owner.username
             return render_template('solo.html',title=title,body=body,username=owner)
-        
+        if 'user' in request.args:
+            #user_id = request.args.get('user', '')
+            user = User.query.filter_by(id=user_id).first()
+            posts = user.posts
+            return render_template('singleUser.html', posts=posts)
+                       
     else:
         posts = Blog.query.all()
         return render_template('blog.html',posts=posts)
