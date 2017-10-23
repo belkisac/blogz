@@ -1,6 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% with messages = get_flashed_messages(category_filter=["existing_error"]) %}
+{% if messages %}
+    {% for message in messages %}
+        <p class="error">{{message}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages(category_filter=["username_error"]) %}
+{% if messages %}
+    {% for message in messages %}
+        <p class="error">{{message}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages(category_filter=["password_error"]) %}
+{% if messages %}
+    {% for message in messages %}
+        <p class="error">{{message}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages(category_filter=["verify_error"]) %}
+{% if messages %}
+    {% for message in messages %}
+        <p class="error">{{message}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
 <form method='POST' action='/signup'>
     <label for='username'>Username:
         <input type='text' value='{{username}}' name='username' />

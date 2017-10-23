@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% with messages = get_flashed_messages %}
+{% with messages = get_flashed_messages(category_filter=["username_error"]) %}
+{% if messages %}
+    {% for message in messages %}
+        <p class="error">{{message}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+{% with messages = get_flashed_messages(category_filter=["password_error"]) %}
 {% if messages %}
     {% for message in messages %}
         <p class="error">{{message}}</p>
