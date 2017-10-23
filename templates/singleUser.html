@@ -5,7 +5,7 @@
 <div><h2><a href="?id={{post.id}}">{{post.title}}</a></h2>
     <p class="blog">{{post.body}}</p>
     <input type="hidden" name="post-id" value="{{post.id}}" />
-    <p class="blog">Written by <a href="?user={{post.owner.username}}">{{post.owner.username}}</a></p>
+    <p class="blog">Written by <a href="?user={{post.owner.id}}">{{post.owner.username}}</a></p>
 <hr />
 </div>
 {% endfor %}

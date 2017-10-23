@@ -40,18 +40,23 @@ def require_login():
 @app.route('/blog', methods=['POST', 'GET'])
 def blog_display():
 
+    user_id = request.args.get('user', '')
+    post_id = request.args.get('id', '')
+
     if request.args != {}:
+        if request.args['user']:
+            #user_id = request.args.get('user', '')
+            user = User.query.filter_by(id=user_id).first()
+            posts = user.posts
+            return render_template('singleUser.html', posts=posts)
         if request.args['id']:
-            post_id = request.args.get('id', '')
+            #post_id = request.args.get('id', '')
             post = Blog.query.filter_by(id=post_id).first()
             title = post.title
             body = post.body
-            return render_template('solo.html',title=title,body=body)
-        if request.args['user']:
-            username = request.args.get('user', '')
-            user = User.query.filter_by(username=username).first()
-            posts = user.posts
-            return render_template('singleUser.html', posts=posts)
+            owner = post.owner.username
+            return render_template('solo.html',title=title,body=body,username=owner)
+        
     else:
         posts = Blog.query.all()
         return render_template('blog.html',posts=posts)
@@ -123,10 +128,11 @@ def logout():
 def index():
 
     if request.args != {}:
-        username = request.args.get('user', '')
-        user = User.query.filter_by(username=username).first()
+        user_id = request.args.get('user', '')
+        user = User.query.filter_by(id=user_id).first()
         posts = user.posts
-        return redirect(url_for('.blog_display', user=username))
+        #return render_template('singleUser.html', posts=posts)
+        return redirect(url_for('.blog_display', user=user_id))
     else:
         users = User.query.all()
         return render_template('index.html',users=users)
