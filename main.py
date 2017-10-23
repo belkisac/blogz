@@ -31,10 +31,11 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+allowed_routes = ['login', 'signup', 'blog_display', 'index']
+
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'blog_display', 'index']
-    if request.endpoint not in allowed_routes and 'username' not in session:
+    if not ('username' in session or request.endpoint in allowed_routes):
         return redirect('/login')
 
 @app.route('/blog', methods=['POST', 'GET'])
@@ -50,7 +51,8 @@ def blog_display():
             title = post.title
             body = post.body
             owner = post.owner.username
-            return render_template('solo.html',title=title,body=body,username=owner)
+            user_id = post.owner.id
+            return render_template('solo.html',title=title,body=body,username=owner,user_id=user_id)
         if 'user' in request.args:
             #user_id = request.args.get('user', '')
             user = User.query.filter_by(id=user_id).first()
@@ -67,14 +69,15 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
-            session['username'] = username
-            return redirect('/newpost')
+        if not user:
+            flash("Username does not exist", "username_error")
         else:
-            if not user:
-                flash("Username does not exist", "username_error")
+            if user and user.password == password:
+                session['username'] = username
+                return redirect('/newpost')
             if user.password != password:
                 flash("Incorrect password", "password_error")
+
     
     return render_template('login.html')
 
